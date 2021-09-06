@@ -3,7 +3,7 @@ const path = require('path');
 
 const GAME_ID = 'citiesskylines';
 const STEAMAPP_ID = '255710';
-// const EPICAPP_ID = ''; // Unknown ID research required. https://modding.wiki/en/vortex/developer/game-detection
+const EPICAPP_ID = 'bcbc03d8812a44c18f41cf7d5f849265';
 // const ORIGINAPP_ID = ''; // Unknown ID research required. https://modding.wiki/en/vortex/developer/game-detection
 
 const MOD_BASE_PATH = path.join(util.getVortexPath('localAppData'), 'Colossal Order', 'Cities_Skylines');
@@ -17,7 +17,7 @@ const MOD_EXT = '.dll';
 // const HARMONY = 'citiesharmony.harmony.dll'; // Must go in the "Mods" folder without a subfolder.
 
 function findGame() {
-    return util.GameStoreHelper.findByAppId([STEAMAPP_ID])
+    return util.GameStoreHelper.findByAppId([STEAMAPP_ID, EPICAPP_ID])
     .then(game => game.gamePath);
 }
 
@@ -135,7 +135,8 @@ function main(context) {
             "Cities.exe"
         ],
         details: {
-            steamAppId: STEAMAPP_ID
+            steamAppId: STEAMAPP_ID,
+            epicAppId: EPICAPP_ID
         }
     });
 
