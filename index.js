@@ -1,5 +1,6 @@
 const { fs, util } = require('vortex-api');
 const path = require('path');
+const { getFileVersion } = require('exe-version');
 
 const GAME_ID = 'citiesskylines';
 const STEAMAPP_ID = '255710';
@@ -120,6 +121,20 @@ async function askUserModType(api) {
 
 }
 
+async function getGameVersion(discoveryPath) {
+    const launcherSettings = path.join(discoveryPath, 'launcher-settings.json');
+    try {
+        const launcherJSON = await fs.readFileAsync(launcherSettings, { encoding: 'utf8' });
+        const version = JSON.parse(launcherJSON)?.version;
+        return version;
+
+    }
+    catch(err) {
+        log('error', 'Unable to get game version for Cities Skylines from the launcher settings JSON file. Falling back to the EXE.', err);
+        return getFileVersion(path.join(discoveryPath, 'Cities.exe'));
+    }
+}
+
 function main(context) {
 
     context.registerGame({
@@ -134,6 +149,7 @@ function main(context) {
         requiredFiles: [
             "Cities.exe"
         ],
+        getGameVersion,
         details: {
             steamAppId: STEAMAPP_ID,
             epicAppId: EPICAPP_ID
